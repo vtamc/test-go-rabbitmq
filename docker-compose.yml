@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  receiver:
+    image: golang:latest
+    command: sh -c "sleep 31536000"
+    volumes:
+      - ./:/app
+
+  rabbitmq:
+    image: rabbitmq:3.11.11-management
+    restart: always
+    environment:
+      - RABBITMQ_DEFAULT_USER=root
+      - RABBITMQ_DEFAULT_PASS=root
+    ports:
+      - 5672:5672
+      - 15672:15672
