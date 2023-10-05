@@ -8,7 +8,7 @@ import (
 
 type Consumer struct{}
 
-func (c *Consumer) Start() {
+func (c Consumer) Start() {
 	conn, err := amqp.Dial("amqp://root:root@rabbitmq:5672/")
 	c.failOnError(err, "Failed to connect to RabbitMQ")
 	defer conn.Close()
@@ -42,7 +42,7 @@ func (c *Consumer) Start() {
 
 	go func() {
 		for d := range msgs {
-			log.Printf("Received a message: %s", d.Body)
+			Handler(d)
 		}
 	}()
 
@@ -50,7 +50,7 @@ func (c *Consumer) Start() {
 	<-forever
 }
 
-func (c *Consumer) failOnError(err error, msg string) {
+func (c Consumer) failOnError(err error, msg string) {
 	if err != nil {
 		log.Panicf("%s: %s", msg, err)
 	}
